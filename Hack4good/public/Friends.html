@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap">
+
+  <title>The Nurturing Nature Network</title>
+  <title>Friend Information</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      font-family: 'Bebas Neue', sans-serif; /* Apply Bebas Neue to the header */
+      background-color:  #3a6238; /* Light pastel green */
+      color: black; /* Changed color to black */
+      padding: 4px; /* Decreased padding */
+      text-align: left; /* Align the title to the left */
+      display: flex;
+      justify-content: space-between; /* Align the navbar to the right */
+      align-items: center; /* Vertically center content in the header */
+      letter-spacing: 2px; /* Adjust the value as needed */
+    }
+
+    h1 {
+      font-size: 1.5rem; /* Decreased font size */
+      margin: 0; /* Remove margin to prevent spacing */
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 35px; /* Adjust the width of the logo */
+      height: 35px; /* Adjust the height of the logo */
+      margin-right: 10px; /* Adjust the margin between the logo and text */
+    }
+    
+    #navbar {
+      overflow: hidden;
+    }
+
+    #navbar a {
+      float: left;
+      display: block;
+      color: black; /* Changed color to black */
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-family: 'Bebas Neue', sans-serif; /* Apply Bebas Neue to the navbar links */
+      letter-spacing: 2px; /* Adjust the value as needed */
+    }
+
+    #navbar a:hover {
+      background-color: #4f804f; /* Darker shade on hover */
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<header>
+    <div class="logo-container">
+      <img src="images/GUI logo.png" alt="Logo" class="logo">
+      <h1>The Nurturing Nature Network</h1>
+    </div>
+    <div id="navbar">
+      <a href="/achievements">
+        Achievements
+      </a>
+      <a href="/friends">
+        Friends
+      </a>
+      <a href="/store">
+        Store
+      </a>
+      <a href="/my-account">
+        My Account
+      </a>
+
+    </div>
+  </header>
+<body>
+  <h1>Friend Information</h1>
+  <div id="friend-info"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const userId = 'replace-with-actual-user-id'; // Replace with the actual user ID
+
+      // Fetch user information, including the friend list, from the backend
+      fetch(`/user/${userId}`)
+        .then(response => response.json())
+        .then(user => displayFriendInfo(user.friends))
+        .catch(error => console.error('Error fetching user information:', error));
+    });
+
+    function displayFriendInfo(friends) {
+      const friendInfoContainer = document.getElementById('friend-info');
+
+      if (!friends || friends.length === 0) {
+        friendInfoContainer.innerHTML = '<p>No friends found</p>';
+        return;
+      }
+
+      friends.forEach(friend => {
+        const table = document.createElement('table');
+        const tbody = document.createElement('tbody');
+
+        // Add rows for each field in the Friend schema
+        addRow(tbody, 'User ID', friend.userId);
+        addRow(tbody, 'Friend ID', friend.friendId);
+        addRow(tbody, 'Friend Level', friend.friendLevel);
+        addRow(tbody, 'Friend Experience Level', friend.friendExperienceLevel);
+        addRow(tbody, 'Friend Experience Points', friend.friendExperiencePoints);
+
+        // Loop through friend achievements and add rows
+        friend.friendAchievements.forEach(achievement => {
+          addRow(tbody, `Location ID (${achievement.locationId})`, `Hours Volunteered: ${achievement.HoursVolunteered}`);
+        });
+
+        table.appendChild(tbody);
+        friendInfoContainer.appendChild(table);
+      });
+    }
+
+    function addRow(tbody, key, value) {
+      const row = tbody.insertRow();
+      const cell1 = row.insertCell(0);
+      const cell2 = row.insertCell(1);
+      cell1.textContent = key;
+      cell2.textContent = value;
+    }
+  </script>
+</body>
+</html>
