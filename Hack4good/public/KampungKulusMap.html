@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ground Up Achiever</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    header {
+      background-color:  #3a6238; /* Light pastel green */
+      color: black; /* Changed color to black */
+      padding: 8px; /* Decreased padding */
+      text-align: left; /* Align the title to the left */
+      display: flex;
+      justify-content: space-between; /* Align the navbar to the right */
+      align-items: center; /* Vertically center content in the header */
+    }
+
+    h1 {
+      font-size: 1.5rem; /* Decreased font size */
+      margin: 0; /* Remove margin to prevent spacing */
+    }
+
+    #navbar {
+      overflow: hidden;
+    }
+
+    #navbar a {
+      float: left;
+      display: block;
+      color: black; /* Changed color to black */
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    #navbar a:hover {
+      background-color: #4f804f; /* Darker shade on hover */
+      color: white;
+    }
+
+    #map {
+      position: absolute;
+      top: 50px; /* Adjust as needed based on header height */
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - 50px); /* Adjust as needed based on header height */
+      background-image: url('images/map of kampung Kampus2.jpg');
+      background-size: 100% 100%;
+      background-position: center;
+    }
+    
+    .marker {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ground Up Achiever</h1>
+    <div id="navbar">
+      <a href="/achievements">Achievements</a>
+      <a href="/friends">Friends</a>
+      <a href="/my-account">My Account</a>
+    </div>
+  </header>
+
+  <div id="map"></div>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Your JavaScript code to interact with the backend and handle zones
+    const map = L.map('map').setView([0, 0], 2); // Set initial coordinates and zoom level
+  
+    // Example achievement data for 10 zones
+    const zoneAchievements = [
+      { id: 1, level: 1 },
+      { id: 2, level: 1 },
+      { id: 3, level: 1 },
+      { id: 4, level: 1 },
+      { id: 5, level: 1 },
+      { id: 6, level: 1 },
+      { id: 7, level: 1 },
+      { id: 8, level: 1 },
+      { id: 9, level: 1 },
+      { id: 10, level: 1 },
+    ];
+  
+    // Custom icon for different tree types
+    const treeIcons = {
+      1: 'images/treelvl1.jpg',
+      1: 'path/to/tree1.png',
+      1: 'path/to/tree1.png',
+      1: 'path/to/tree1.png',
+      1: 'path/to/tree1.png',
+      1: 'images/goldentree.png',
+      // ... (Add other tree icons for different achievement levels)
+    };
+  
+    // Add zones for each achievement level
+    zoneAchievements.forEach(zone => {
+      // Example polygon coordinates for each zone (replace with actual coordinates)
+      const zoneCoordinates = [
+        [0, 0],
+        [1, 0],
+        [1, 1],
+        [0, 1],
+      ];
+  
+      // Create a polygon for the zone
+      const polygon = L.polygon(zoneCoordinates).addTo(map);
+  
+      // Set the style based on the achievement level
+      const treeIconPath = treeIcons[zone.level] || 'path/to/default-tree.png';
+      const treeIcon = new L.Icon({
+        iconUrl: treeIconPath,
+        iconSize: [25, 41], // Adjust the size as needed
+        iconAnchor: [12, 41], // Adjust the anchor as needed
+      });
+  
+      // Add a marker with the tree icon at the center of the zone
+      const zoneCenter = L.latLngBounds(zoneCoordinates).getCenter();
+      L.marker(zoneCenter, { icon: treeIcon }).addTo(map);
+  
+      // Bind a popup with achievement level information
+      polygon.bindPopup(`Zone ${zone.id} - Achievement Level: ${zone.level}`);
+    });
+  
+    // Your other interactive elements and logic here
+  </script>
+</body>
+</html>
